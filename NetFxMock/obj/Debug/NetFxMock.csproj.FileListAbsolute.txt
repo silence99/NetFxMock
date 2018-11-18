@@ -1,0 +1,6 @@
+D:\work\code\NetFxMock\NetFxMock\bin\Debug\NetFxMock.dll
+D:\work\code\NetFxMock\NetFxMock\bin\Debug\NetFxMock.pdb
+D:\work\code\NetFxMock\NetFxMock\obj\Debug\NetFxMock.csprojResolveAssemblyReference.cache
+D:\work\code\NetFxMock\NetFxMock\obj\Debug\NetFxMock.csproj.CoreCompileInputs.cache
+D:\work\code\NetFxMock\NetFxMock\obj\Debug\NetFxMock.dll
+D:\work\code\NetFxMock\NetFxMock\obj\Debug\NetFxMock.pdb
