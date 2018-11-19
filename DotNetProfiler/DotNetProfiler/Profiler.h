@@ -47,8 +47,6 @@ END_COM_MAP()
 	HRESULT FinalConstruct();
 	void FinalRelease();
 
-	// STARTUP/SHUTDOWN EVENTS
-	STDMETHOD(Initialize)(IUnknown *pICorProfilerInfoUnk);
 	STDMETHOD(Shutdown)();
 
 	// callback functions
@@ -64,10 +62,7 @@ END_COM_MAP()
 	void LogString(char* pszFmtString, ...);
 
 private:
-	// container for ICorProfilerInfo reference
-	CComQIPtr<ICorProfilerInfo> m_pICorProfilerInfo;
-	// container for ICorProfilerInfo2 reference
-	CComQIPtr<ICorProfilerInfo2> m_pICorProfilerInfo2;
+	
 	// STL map for our hashed functions
 	std::map<FunctionID, CFunctionInfo*> m_functionMap;
 	// the number of levels deep we are in the call stack
@@ -75,11 +70,7 @@ private:
 	// handle and filename of log file
 	HANDLE m_hLogFile;
 	TCHAR m_logFileName[_MAX_PATH];
-
-	// gets the full method name given a function ID
-	HRESULT GetFullMethodName(FunctionID functionId, LPWSTR wszMethod, int cMethod);
 	// function to set up our event mask
-	HRESULT SetEventMask();
 	// creates the log file
 	void CreateLogFile();
 	// closes the log file ;)

@@ -1,12 +1,12 @@
 #pragma once
-
+#include "resource.h"
 #include <CorHdr.h>
 #include <cor.h>
 #include <corprof.h>
 
+using namespace ATL;
 
-
-
+#define NAME_BUFFER_SIZE 1024
 
 extern "C" class CCorProfilerCallbackImpl: public ICorProfilerCallback2
 {
@@ -114,5 +114,16 @@ public:
 	STDMETHOD(HandleCreated)(GCHandleID handleId, ObjectID initialObjectId);
 	STDMETHOD(HandleDestroyed)(GCHandleID handleId);
 	// End of ICorProfilerCallback2 interface implementation
+
+	protected:
+		// container for ICorProfilerInfo reference
+		CComQIPtr<ICorProfilerInfo> m_pICorProfilerInfo;
+		// container for ICorProfilerInfo2 reference
+		CComQIPtr<ICorProfilerInfo2> m_pICorProfilerInfo2;
+
+		// gets the full method name given a function ID
+		HRESULT GetFullMethodName(FunctionID functionId, LPWSTR wszMethod, int cMethod);
+		void LogString(char *pszFmtString, ...);
+		HRESULT SetEvent();
 };
 
