@@ -1,8 +1,18 @@
 #include "stdafx.h"
+#include <direct.h>
+#include <iostream>
 #include "CorProfilerCallbackImpl.h"
 #include <fstream>
+#include <log4cplus/logger.h>
+#include <log4cplus/loglevel.h>
+#include <log4cplus/loggingmacros.h>
+#include <log4cplus/configurator.h>
+
+#include "ProfilingUtils.h"
+
 
 using namespace std;
+using namespace log4cplus;
 
 void CCorProfilerCallbackImpl::LogString(char *pszFmtString, ...)
 {
@@ -57,11 +67,21 @@ HRESULT CCorProfilerCallbackImpl::GetFullMethodName(FunctionID functionID, LPWST
 	return hr;
 }
 
-CCorProfilerCallbackImpl::CCorProfilerCallbackImpl()
+
+int wchar2char(const wchar_t* wchar, char* out)
 {
-	LogString("Construtor");
+	return WideCharToMultiByte(CP_ACP, 0, wchar, wcslen(wchar), out, NAME_BUFFER_SIZE, NULL, NULL);
 }
 
+CCorProfilerCallbackImpl::CCorProfilerCallbackImpl()
+{
+	char path[100] = { 0 };
+	_getcwd(path, 100);
+	cout << path << endl;
+	PropertyConfigurator::doConfigure(LOG4CPLUS_TEXT("log.properties"));
+	_logger = Logger::getRoot();
+	LOG4CPLUS_FATAL(_logger, "create COM instance");
+}
 
 CCorProfilerCallbackImpl::~CCorProfilerCallbackImpl()
 {
@@ -70,7 +90,7 @@ CCorProfilerCallbackImpl::~CCorProfilerCallbackImpl()
 STDMETHODIMP CCorProfilerCallbackImpl::Initialize(IUnknown *pICorProfilerInfoUnk)
 {
 	// log that we are initializing
-	LogString("Initializing...");
+	LOG4CPLUS_FATAL(_logger, "Initializing...");
 
 	// get the ICorProfilerInfo interface
 	HRESULT hr = pICorProfilerInfoUnk->QueryInterface(IID_ICorProfilerInfo, (LPVOID*)&m_pICorProfilerInfo);
@@ -85,9 +105,9 @@ STDMETHODIMP CCorProfilerCallbackImpl::Initialize(IUnknown *pICorProfilerInfoUnk
 	}
 	// report our success or failure to the log file
 	if (FAILED(hr))
-		LogString("Error setting the enter, leave and tailcall hooks\r\n\r\n");
+		LOG4CPLUS_FATAL(_logger, "Error setting the enter, leave and tailcall hooks\r\n\r\n");
 	else
-		LogString("Successfully initialized profiling\r\n\r\n");
+		LOG4CPLUS_FATAL(_logger, "Successfully initialized profiling\r\n\r\n");
 
 	SetEvent();
 
@@ -146,6 +166,11 @@ STDMETHODIMP CCorProfilerCallbackImpl::ModuleLoadStarted(ModuleID moduleID)
 
 STDMETHODIMP CCorProfilerCallbackImpl::ModuleLoadFinished(ModuleID moduleID, HRESULT hrStatus)
 {
+	WCHAR szName[NAME_BUFFER_SIZE] = { 0 };
+	ULONG length =  GetModuleName(this->m_pICorProfilerInfo, moduleID, szName, NAME_BUFFER_SIZE);
+	char name[NAME_BUFFER_SIZE] = { 0 };
+	wchar2char(szName, name);
+	LOG4CPLUS_INFO(_logger, name);
 	return S_OK;
 }
 
@@ -494,7 +519,6 @@ STDMETHODIMP CCorProfilerCallbackImpl::HandleDestroyed(GCHandleID handleID)
 
 HRESULT CCorProfilerCallbackImpl::SetEvent()
 {
-	LogString("Set Event mask");
 	//COR_PRF_MONITOR_NONE	= 0,
 	//COR_PRF_MONITOR_FUNCTION_UNLOADS	= 0x1,
 	//COR_PRF_MONITOR_CLASS_LOADS	= 0x2,
@@ -533,6 +557,6 @@ HRESULT CCorProfilerCallbackImpl::SetEvent()
 	//COR_PRF_MONITOR_IMMUTABLE	= COR_PRF_MONITOR_CODE_TRANSITIONS | COR_PRF_MONITOR_REMOTING | COR_PRF_MONITOR_REMOTING_COOKIE | COR_PRF_MONITOR_REMOTING_ASYNC | COR_PRF_MONITOR_GC | COR_PRF_ENABLE_REJIT | COR_PRF_ENABLE_INPROC_DEBUGGING | COR_PRF_ENABLE_JIT_MAPS | COR_PRF_DISABLE_OPTIMIZATIONS | COR_PRF_DISABLE_INLINING | COR_PRF_ENABLE_OBJECT_ALLOCATED | COR_PRF_ENABLE_FUNCTION_ARGS | COR_PRF_ENABLE_FUNCTION_RETVAL | COR_PRF_ENABLE_FRAME_INFO | COR_PRF_ENABLE_STACK_SNAPSHOT | COR_PRF_USE_PROFILE_IMAGES
 
 	// set the event mask 
-	DWORD eventMask = (DWORD)(COR_PRF_MONITOR_JIT_COMPILATION);
+	DWORD eventMask = (DWORD)(COR_PRF_MONITOR_JIT_COMPILATION | COR_PRF_MONITOR_MODULE_LOADS);
 	return m_pICorProfilerInfo->SetEventMask(eventMask);
 }

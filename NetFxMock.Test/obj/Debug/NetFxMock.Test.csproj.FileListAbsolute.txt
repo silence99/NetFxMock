@@ -1,10 +1,10 @@
 D:\work\code\NetFxMock\NetFxMock.Test\bin\Debug\NetFxMock.Test.exe.config
 D:\work\code\NetFxMock\NetFxMock.Test\bin\Debug\NetFxMock.Test.exe
 D:\work\code\NetFxMock\NetFxMock.Test\bin\Debug\NetFxMock.Test.pdb
-D:\work\code\NetFxMock\NetFxMock.Test\obj\Debug\NetFxMock.Test.csprojResolveAssemblyReference.cache
 D:\work\code\NetFxMock\NetFxMock.Test\obj\Debug\NetFxMock.Test.csproj.CoreCompileInputs.cache
 D:\work\code\NetFxMock\NetFxMock.Test\obj\Debug\NetFxMock.Test.exe
 D:\work\code\NetFxMock\NetFxMock.Test\obj\Debug\NetFxMock.Test.pdb
 D:\work\code\NetFxMock\NetFxMock.Test\bin\Debug\NetFxMock.dll
 D:\work\code\NetFxMock\NetFxMock.Test\bin\Debug\NetFxMock.pdb
 D:\work\code\NetFxMock\NetFxMock.Test\obj\Debug\NetFxMock.Test.csproj.CopyComplete
+D:\work\code\NetFxMock\NetFxMock.Test\obj\Debug\NetFxMock.Test.csprojAssemblyReference.cache

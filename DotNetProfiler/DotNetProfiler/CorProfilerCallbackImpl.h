@@ -4,7 +4,10 @@
 #include <cor.h>
 #include <corprof.h>
 
+#include <log4cplus/logger.h>
+
 using namespace ATL;
+using namespace log4cplus;
 
 #define NAME_BUFFER_SIZE 1024
 
@@ -125,5 +128,13 @@ public:
 		HRESULT GetFullMethodName(FunctionID functionId, LPWSTR wszMethod, int cMethod);
 		void LogString(char *pszFmtString, ...);
 		HRESULT SetEvent();
+
+		Logger _logger;
+		const char* DEFAULT_MOCK_MODULE = "MOCK.dll";
+		const char* DEFAULT_MOCK_SET_FUNCTION = "SetMock";
+		char _mock_module[200] = { 0 };
+		char _mock_set_function[100] = { 0 };
+		ModuleID _mock_module_id;
+		FunctionID _mock_function_id;
 };
 

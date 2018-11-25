@@ -10,7 +10,9 @@ namespace NetFxMock.Test
 	{
 		static void Main(string[] args)
 		{
-			MockObject.GetCompileMethodMockFragment();
+            Console.Read();
+            Console.WriteLine("testing");
+            Console.Read();
 		}
 	}
 }

@@ -40,6 +40,9 @@
     <ClCompile Include="FunctionInfo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ProfilingUtils.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -66,6 +69,9 @@
     <ClInclude Include="FunctionInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ProfilingUtils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DotNetProfiler.rc">
@@ -82,10 +88,16 @@
     <None Include="Profiler.rgs">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="DotNetProfiler.idl">
       <Filter>源文件</Filter>
     </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="log.properties">
+      <Filter>头文件</Filter>
+    </Text>
   </ItemGroup>
 </Project>

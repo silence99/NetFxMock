@@ -9,6 +9,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JitHook", "JitHook\JitHook.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFxMock", "NetFxMock\NetFxMock.csproj", "{F28A6A42-9C02-4AF9-BA86-AF91C5F98374}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DotNetProfiler", "DotNetProfiler\DotNetProfiler\DotNetProfiler.vcxproj", "{577751BE-FB7C-48B5-9C6D-19D819C1151C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DotNetProfilerPS", "DotNetProfiler\DotNetProfilerPS\DotNetProfilerPS.vcxproj", "{7FB50479-0DCA-4A5B-A1B3-33B53836CB97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,26 @@ Global
 		{F28A6A42-9C02-4AF9-BA86-AF91C5F98374}.Release|x64.Build.0 = Release|Any CPU
 		{F28A6A42-9C02-4AF9-BA86-AF91C5F98374}.Release|x86.ActiveCfg = Release|Any CPU
 		{F28A6A42-9C02-4AF9-BA86-AF91C5F98374}.Release|x86.Build.0 = Release|Any CPU
+		{577751BE-FB7C-48B5-9C6D-19D819C1151C}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{577751BE-FB7C-48B5-9C6D-19D819C1151C}.Debug|x64.ActiveCfg = Debug|x64
+		{577751BE-FB7C-48B5-9C6D-19D819C1151C}.Debug|x64.Build.0 = Debug|x64
+		{577751BE-FB7C-48B5-9C6D-19D819C1151C}.Debug|x86.ActiveCfg = Debug|Win32
+		{577751BE-FB7C-48B5-9C6D-19D819C1151C}.Debug|x86.Build.0 = Debug|Win32
+		{577751BE-FB7C-48B5-9C6D-19D819C1151C}.Release|Any CPU.ActiveCfg = Release|Win32
+		{577751BE-FB7C-48B5-9C6D-19D819C1151C}.Release|x64.ActiveCfg = Release|x64
+		{577751BE-FB7C-48B5-9C6D-19D819C1151C}.Release|x64.Build.0 = Release|x64
+		{577751BE-FB7C-48B5-9C6D-19D819C1151C}.Release|x86.ActiveCfg = Release|Win32
+		{577751BE-FB7C-48B5-9C6D-19D819C1151C}.Release|x86.Build.0 = Release|Win32
+		{7FB50479-0DCA-4A5B-A1B3-33B53836CB97}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{7FB50479-0DCA-4A5B-A1B3-33B53836CB97}.Debug|x64.ActiveCfg = Debug|x64
+		{7FB50479-0DCA-4A5B-A1B3-33B53836CB97}.Debug|x64.Build.0 = Debug|x64
+		{7FB50479-0DCA-4A5B-A1B3-33B53836CB97}.Debug|x86.ActiveCfg = Debug|Win32
+		{7FB50479-0DCA-4A5B-A1B3-33B53836CB97}.Debug|x86.Build.0 = Debug|Win32
+		{7FB50479-0DCA-4A5B-A1B3-33B53836CB97}.Release|Any CPU.ActiveCfg = Release|Win32
+		{7FB50479-0DCA-4A5B-A1B3-33B53836CB97}.Release|x64.ActiveCfg = Release|x64
+		{7FB50479-0DCA-4A5B-A1B3-33B53836CB97}.Release|x64.Build.0 = Release|x64
+		{7FB50479-0DCA-4A5B-A1B3-33B53836CB97}.Release|x86.ActiveCfg = Release|Win32
+		{7FB50479-0DCA-4A5B-A1B3-33B53836CB97}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

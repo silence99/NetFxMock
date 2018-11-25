@@ -31,4 +31,11 @@
 *.out
 *.app
 
+# C#
 .vs
+/Debug/
+log/
+bin/
+obj/
+*.pdb
+*.log
