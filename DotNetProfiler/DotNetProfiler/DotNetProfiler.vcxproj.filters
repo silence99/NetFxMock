@@ -88,7 +88,6 @@
     <None Include="Profiler.rgs">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="DotNetProfiler.idl">

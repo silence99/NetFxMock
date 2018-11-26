@@ -47,6 +47,8 @@ END_COM_MAP()
 	HRESULT FinalConstruct();
 	void FinalRelease();
 
+	STDMETHOD_(HRESULT __stdcall, Initialize)(IUnknown * pICorProfilerInfoUnk);
+	STDMETHOD(SetEvent)();
 	STDMETHOD(Shutdown)();
 
 	// callback functions
@@ -58,27 +60,10 @@ END_COM_MAP()
 	static UINT_PTR _stdcall FunctionMapper(FunctionID functionId, BOOL *pbHookFunction);
 	void MapFunction(FunctionID);
 
-	// logging function
-	void LogString(char* pszFmtString, ...);
-
 private:
 	
-	// STL map for our hashed functions
-	std::map<FunctionID, CFunctionInfo*> m_functionMap;
 	// the number of levels deep we are in the call stack
 	int m_callStackSize;
-	// handle and filename of log file
-	HANDLE m_hLogFile;
-	TCHAR m_logFileName[_MAX_PATH];
-	// function to set up our event mask
-	// creates the log file
-	void CreateLogFile();
-	// closes the log file ;)
-	void CloseLogFile();
-
-public:
-
-
 
 };
 

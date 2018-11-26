@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommand>$(SolutionDir)NetFxMock.Test\bin\Debug\NetFxMock.Test.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>$(SolutionDir)..\NetFxMock.Test\bin\Debug\NetFxMock.Test.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerEnvironment>set COR_ENABLE_PROFILING=1 COR_PROFILER={ad7ef5d7-3361-4acd-8d9c-59c5aa4702b9} COR_PROFILER_PATH=D:\work\code\DotNetProfiler\Debug\DotNetProfiler.dll $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
   </PropertyGroup>

@@ -14,28 +14,54 @@ CProfiler* g_pICorProfilerCallback = NULL;
 
 CProfiler::CProfiler()
 {
-	LogString("create profiler");
-	m_hLogFile = INVALID_HANDLE_VALUE;
+	Log_Info("create profiler");
 	m_callStackSize = 0;
 }
 
-HRESULT CProfiler::FinalConstruct()
+
+
+STDMETHODIMP CProfiler::SetEvent()
 {
-	
+	//COR_PRF_MONITOR_NONE	= 0,
+	//COR_PRF_MONITOR_FUNCTION_UNLOADS	= 0x1,
+	//COR_PRF_MONITOR_CLASS_LOADS	= 0x2,
+	//COR_PRF_MONITOR_MODULE_LOADS	= 0x4,
+	//COR_PRF_MONITOR_ASSEMBLY_LOADS	= 0x8,
+	//COR_PRF_MONITOR_APPDOMAIN_LOADS	= 0x10,
+	//COR_PRF_MONITOR_JIT_COMPILATION	= 0x20,
+	//COR_PRF_MONITOR_EXCEPTIONS	= 0x40,
+	//COR_PRF_MONITOR_GC	= 0x80,
+	//COR_PRF_MONITOR_OBJECT_ALLOCATED	= 0x100,
+	//COR_PRF_MONITOR_THREADS	= 0x200,
+	//COR_PRF_MONITOR_REMOTING	= 0x400,
+	//COR_PRF_MONITOR_CODE_TRANSITIONS	= 0x800,
+	//COR_PRF_MONITOR_ENTERLEAVE	= 0x1000,
+	//COR_PRF_MONITOR_CCW	= 0x2000,
+	//COR_PRF_MONITOR_REMOTING_COOKIE	= 0x4000 | COR_PRF_MONITOR_REMOTING,
+	//COR_PRF_MONITOR_REMOTING_ASYNC	= 0x8000 | COR_PRF_MONITOR_REMOTING,
+	//COR_PRF_MONITOR_SUSPENDS	= 0x10000,
+	//COR_PRF_MONITOR_CACHE_SEARCHES	= 0x20000,
+	//COR_PRF_MONITOR_CLR_EXCEPTIONS	= 0x1000000,
+	//COR_PRF_MONITOR_ALL	= 0x107ffff,
+	//COR_PRF_ENABLE_REJIT	= 0x40000,
+	//COR_PRF_ENABLE_INPROC_DEBUGGING	= 0x80000,
+	//COR_PRF_ENABLE_JIT_MAPS	= 0x100000,
+	//COR_PRF_DISABLE_INLINING	= 0x200000,
+	//COR_PRF_DISABLE_OPTIMIZATIONS	= 0x400000,
+	//COR_PRF_ENABLE_OBJECT_ALLOCATED	= 0x800000,
+	// New in VS2005
+	//	COR_PRF_ENABLE_FUNCTION_ARGS	= 0x2000000,
+	//	COR_PRF_ENABLE_FUNCTION_RETVAL	= 0x4000000,
+	//  COR_PRF_ENABLE_FRAME_INFO	= 0x8000000,
+	//  COR_PRF_ENABLE_STACK_SNAPSHOT	= 0x10000000,
+	//  COR_PRF_USE_PROFILE_IMAGES	= 0x20000000,
+	// End New in VS2005
+	//COR_PRF_ALL	= 0x3fffffff,
+	//COR_PRF_MONITOR_IMMUTABLE	= COR_PRF_MONITOR_CODE_TRANSITIONS | COR_PRF_MONITOR_REMOTING | COR_PRF_MONITOR_REMOTING_COOKIE | COR_PRF_MONITOR_REMOTING_ASYNC | COR_PRF_MONITOR_GC | COR_PRF_ENABLE_REJIT | COR_PRF_ENABLE_INPROC_DEBUGGING | COR_PRF_ENABLE_JIT_MAPS | COR_PRF_DISABLE_OPTIMIZATIONS | COR_PRF_DISABLE_INLINING | COR_PRF_ENABLE_OBJECT_ALLOCATED | COR_PRF_ENABLE_FUNCTION_ARGS | COR_PRF_ENABLE_FUNCTION_RETVAL | COR_PRF_ENABLE_FRAME_INFO | COR_PRF_ENABLE_STACK_SNAPSHOT | COR_PRF_USE_PROFILE_IMAGES
 
-	// log that we have reached FinalConstruct
-	LogString("Entering FinalConstruct\r\n\r\n");
-
-	return S_OK;
-}
-
-void CProfiler::FinalRelease()
-{
-	// log that we have reached FinalRelease
-	LogString("\r\n\r\nEntering FinalRelease\r\n\r\n");
-
-	// close the log file
-	CloseLogFile();
+	// set the event mask 
+	DWORD eventMask = (DWORD)(COR_PRF_MONITOR_JIT_COMPILATION | COR_PRF_MONITOR_MODULE_LOADS | COR_PRF_MONITOR_ENTERLEAVE);
+	return m_pICorProfilerInfo->SetEventMask(eventMask);
 }
 
 // ----  CALLBACK FUNCTIONS ------------------
@@ -139,6 +165,49 @@ void _declspec(naked) FunctionTailcallNaked(FunctionID functionID, UINT_PTR clie
 	}
 }
 
+STDMETHODIMP CProfiler::Initialize(IUnknown *pICorProfilerInfoUnk)
+{
+	// log that we are initializing
+	Log_Info("Initializing...");
+	g_pICorProfilerCallback = this;
+
+	// get the ICorProfilerInfo interface
+	HRESULT hr = pICorProfilerInfoUnk->QueryInterface(IID_ICorProfilerInfo, (LPVOID*)&m_pICorProfilerInfo);
+	if (FAILED(hr))
+		return E_FAIL;
+	// determine if this object implements ICorProfilerInfo2
+	hr = pICorProfilerInfoUnk->QueryInterface(IID_ICorProfilerInfo2, (LPVOID*)&m_pICorProfilerInfo2);
+	if (FAILED(hr))
+	{
+		// we still want to work if this call fails, might be an older .NET version
+		m_pICorProfilerInfo2.p = NULL;
+		Log_Error("Error setting the enter, leave and tailcall hooks");
+	}
+	else
+	{
+		Log_Error("Successfully initialized profiling");
+	}
+
+	// set the enter, leave and tailcall hooks
+	if (m_pICorProfilerInfo2.p == NULL)
+	{
+		// note that we are casting our functions to the definitions for the callbacks
+		hr = m_pICorProfilerInfo->SetEnterLeaveFunctionHooks((FunctionEnter*)&FunctionEnterNaked, (FunctionLeave*)&FunctionLeaveNaked, (FunctionTailcall*)&FunctionTailcallNaked);
+		if (SUCCEEDED(hr))
+			hr = m_pICorProfilerInfo->SetFunctionIDMapper((FunctionIDMapper*)&FunctionMapper);
+	}
+	else
+	{
+		hr = m_pICorProfilerInfo2->SetEnterLeaveFunctionHooks2((FunctionEnter2*)&FunctionEnterNaked, (FunctionLeave2*)&FunctionLeaveNaked, (FunctionTailcall2*)&FunctionTailcallNaked);
+		if (SUCCEEDED(hr))
+			hr = m_pICorProfilerInfo2->SetFunctionIDMapper(FunctionMapper);
+	}
+
+	SetEvent();
+
+	return S_OK;
+}
+
 // ----  MAPPING FUNCTIONS ------------------
 
 // this function is called by the CLR when a function has been mapped to an ID
@@ -166,7 +235,7 @@ void CProfiler::Enter(FunctionID functionID, UINT_PTR clientData, COR_PRF_FRAME_
 {
 	WCHAR szMethodName[NAME_BUFFER_SIZE];
 	GetFullMethodName(functionID, szMethodName, NAME_BUFFER_SIZE);
-	LogString("enter function:", szMethodName);
+	Log_Info("enter function:", szMethodName);
 	m_callStackSize++;
 }
 
@@ -190,20 +259,11 @@ void CProfiler::Tailcall(FunctionID functionID, UINT_PTR clientData, COR_PRF_FRA
 STDMETHODIMP CProfiler::Shutdown()
 {
 	// log the we're shutting down
-	LogString("\r\n\r\nShutdown... writing function list\r\n\r\n");
+	Log_Info("\r\n\r\nShutdown... writing function list\r\n\r\n");
 
 	// write the function names and call counts to the output file
 	std::map<FunctionID, CFunctionInfo*>::iterator iter;
-	for (iter = m_functionMap.begin(); iter != m_functionMap.end(); iter++)
-	{
-		// log the function's info
-		CFunctionInfo* functionInfo = iter->second;
-		LogString("%s : call count = %d\r\n", functionInfo->GetName(), functionInfo->GetCallCount());
-		// free the memory for the object
-		delete iter->second;
-	}
-	// clear the map
-	m_functionMap.clear();
+
 
 	// tear down our global access pointers
 	g_pICorProfilerCallback = NULL;
@@ -211,42 +271,16 @@ STDMETHODIMP CProfiler::Shutdown()
 	return S_OK;
 }
 
-// Creates the log file.  It uses the LOG_FILENAME environment variable if it 
-// exists, otherwise it creates the file "ICorProfilerCallback Log.log" in the 
-// executing directory.  This function doesn't report success or not because 
-// LogString always checks for a valid file handle whenever the file is written
-// to.
-void CProfiler::CreateLogFile()
+HRESULT CProfiler::FinalConstruct()
 {
-	
+	// log that we have reached FinalConstruct
+	Log_Info("Entering FinalConstruct\r\n\r\n");
+
+	return S_OK;
 }
 
-// Closes the log file
-void CProfiler::CloseLogFile()
+void CProfiler::FinalRelease()
 {
-	// close the log file
-	if (m_hLogFile != INVALID_HANDLE_VALUE)
-	{
-		CloseHandle(m_hLogFile);
-		m_hLogFile = INVALID_HANDLE_VALUE;
-	}
+	// log that we have reached FinalRelease
+	Log_Info("\r\n\r\nEntering FinalRelease\r\n\r\n");
 }
-
-// Writes a string to the log file.  Uses the same calling convention as printf.
-void CProfiler::LogString(char *pszFmtString, ...)
-{
-	CHAR szBuffer[4096]; 
-	DWORD dwWritten = 0;
-
-	va_list args;
-	va_start(args, pszFmtString);
-	vsprintf_s(szBuffer, pszFmtString, args);
-	va_end(args);
-
-	// write out to the file if the file is open
-	//WriteFile(m_hLogFile, szBuffer, (DWORD)strlen(szBuffer), &dwWritten, NULL);
-	ofstream o("D:\\work\\code\\DotNetProfiler\\Debug\\test.log", ios::app);
-	o << "log:"<< szBuffer << endl;
-	o.close();
-}
-

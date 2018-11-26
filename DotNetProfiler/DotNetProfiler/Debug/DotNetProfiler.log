@@ -57,6 +57,6 @@
   正在生成代码...
   dllmain.cpp
   DotNetProfiler_i.c
-    正在创建库 D:\work\code\NetFxMock\Debug\DotNetProfiler.lib 和对象 D:\work\code\NetFxMock\Debug\DotNetProfiler.exp
-corguids.lib(corprof_i.obj) : warning LNK4099: 未找到 PDB“corguids.pdb”(使用“corguids.lib(corprof_i.obj)”或在“D:\work\code\NetFxMock\Debug\corguids.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-  DotNetProfiler.vcxproj -> D:\work\code\NetFxMock\Debug\DotNetProfiler.dll
+    正在创建库 D:\work\code\NetFxMock\DotNetProfiler\Debug\DotNetProfiler.lib 和对象 D:\work\code\NetFxMock\DotNetProfiler\Debug\DotNetProfiler.exp
+corguids.lib(corprof_i.obj) : warning LNK4099: 未找到 PDB“corguids.pdb”(使用“corguids.lib(corprof_i.obj)”或在“D:\work\code\NetFxMock\DotNetProfiler\Debug\corguids.pdb”中寻找)；正在链接对象，如同没有调试信息一样
+  DotNetProfiler.vcxproj -> D:\work\code\NetFxMock\DotNetProfiler\Debug\DotNetProfiler.dll

@@ -33,9 +33,11 @@
 
 # C#
 .vs
-/Debug/
+
+Debug/
 log/
 bin/
 obj/
 *.pdb
 *.log
+*.tlog
