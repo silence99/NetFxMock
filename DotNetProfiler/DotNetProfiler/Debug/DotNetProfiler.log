@@ -1,4 +1,5 @@
-﻿  Processing .\DotNetProfiler.idl
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.CppClean.targets(76,5): warning : 对路径“d:\work\code\netfxmock\dotnetprofiler\debug\dotnetprofiler.dll”的访问被拒绝。
+  Processing .\DotNetProfiler.idl
   DotNetProfiler.idl
   Processing C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\um\oaidl.idl
   oaidl.idl
@@ -57,6 +58,5 @@
   正在生成代码...
   dllmain.cpp
   DotNetProfiler_i.c
-    正在创建库 D:\work\code\NetFxMock\DotNetProfiler\Debug\DotNetProfiler.lib 和对象 D:\work\code\NetFxMock\DotNetProfiler\Debug\DotNetProfiler.exp
-corguids.lib(corprof_i.obj) : warning LNK4099: 未找到 PDB“corguids.pdb”(使用“corguids.lib(corprof_i.obj)”或在“D:\work\code\NetFxMock\DotNetProfiler\Debug\corguids.pdb”中寻找)；正在链接对象，如同没有调试信息一样
-  DotNetProfiler.vcxproj -> D:\work\code\NetFxMock\DotNetProfiler\Debug\DotNetProfiler.dll
+C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(720,5): error MSB6006: “link.exe”已退出，代码为 1104。
+LINK : fatal error LNK1104: 无法打开文件“D:\work\code\NetFxMock\DotNetProfiler\Debug\DotNetProfiler.dll”
